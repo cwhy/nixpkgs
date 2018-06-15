@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, libcxx
 }:
 
 buildPythonPackage rec {
@@ -11,7 +12,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "ce3be5d520b4d2c3e5eeb4cd2ef62b9b9ab8ac6b6fedbaa0e39cdb6f50644278";
   };
-
+  
+  # work around when python compiling C++ with $CC
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  
   # Does not include tests
   doCheck = false;
 
